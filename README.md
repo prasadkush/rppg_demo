@@ -49,7 +49,22 @@ An integrated webcam is required on the laptop. All the pretrained weights are a
 
 ## Results 
 
-(./result.ebm)
+<br/>
+Please watch a demo video using the link below..
+<br/>
+
+[ Watch video] https://www.dropbox.com/scl/fi/fa8qhlk0lkqjw8zfh4pla/result.webm?rlkey=46ufq3fhcopena57ivay129rf&st=mdg6m56x&dl=0
+
+<br/>
+
+## Acknowledgements
+
+
+
+<br/>
+The code is in this repository is based on the code in this (https://github.com/KegangWangCCNU/ME-rPPG/tree/main) repository. The pretrained weights have also been obtained from the same. The code for face detection has been taken from Mediapipe face detection guide (https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector). The pretrained Blazeface model has been obtained from the same. 
+<br/><br/>
+
 
 ## References
 
