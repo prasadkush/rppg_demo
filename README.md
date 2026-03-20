@@ -33,7 +33,7 @@ Install the requirements.
 ```
 python3 install -r requirements.txt
 ```
-<br/><br/>
+<br/>
 
 ## Instructions for Inference:
 
@@ -49,7 +49,7 @@ An integrated webcam is required on the laptop. All the pretrained weights are a
 
 ## Results 
 
-
+(./result.ebm)
 
 ## References
 
