@@ -69,6 +69,7 @@ def visualize(
 	image_gray = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2GRAY)
 
 	num_detections = 0
+
 	for detection in detection_result.detections:
 		#print('inside num_detections')
 		# Draw bounding_box
@@ -99,6 +100,7 @@ def visualize(
 		first_time_detect = False
 	
 	#if cascade_detection == 0 and first_time_detect == False and num_detections == 0:
+	# use of previous values if no face detected
 	if first_time_detect == False and num_detections == 0:
 		start_point = prev_start_point
 		end_point = prev_end_point
@@ -146,7 +148,7 @@ signal_quality  = 0
 
 
 
-
+# callback function for mediapipe face detector
 def print_result(result, output_image, timestamp_ms):
 		#print('face detector result: {}'.format(result))
 		if not stop_event.is_set():
@@ -185,8 +187,10 @@ def print_result(result, output_image, timestamp_ms):
 						timestamps.append(time.time() - timestamp_start)
 					if len(bvp) > 1:
 
-						sr = min(len(bvp), n_hr_bvp)/(timestamps[-1] - timestamps[-min(len(bvp), n_hr_bvp)])
-						hr, snr = get_hr(bvp[-n_hr_bvp:], sr=sr)
+						sr = min(len(bvp), n_hr_bvp)/(timestamps[-1] - timestamps[-min(len(bvp), n_hr_bvp)])  # computing current sampling rate 
+						#(based on the time nedded to process input frames)
+
+						hr, snr = get_hr(bvp[-n_hr_bvp:], sr=sr)    # computing hear rate
 						print(f'\nSampling rate over last {min(len(bvp), n_hr_bvp)} values: {sr:.2f} Hz')
 						#print('Classifier_used: ', Classifier_used)
 						if bool(num_detections): 
@@ -195,7 +199,11 @@ def print_result(result, output_image, timestamp_ms):
 							print('Face detected: ', bool(num_detections), ' previous detection used')
 						#hr, snr, filtered_data = preprocess_get_hr(bvp[-n_hr_bvp:], sr=sr)
 						print(f'Heart rate: {hr:.2f}')
+						
 						#print(f'snr: {snr:.2f}')
+
+						# computing signal quality 
+
 						if snr == 0:
 							signal_quality = 0
 						elif snr == -1:
@@ -206,6 +214,9 @@ def print_result(result, output_image, timestamp_ms):
 						hrlist.append(hr)
 						print(f'Signal_quality: {signal_quality:.2f}')
 						#print(f'Avg signal quality: {avgsigqual:.2f}')
+
+						# comouting moving average for heart rate
+
 						if len(hrlist) >= windowsize:
 							ma = np.mean(np.array(hrlist[-windowsize:]))
 							mahrlist.append(ma)
@@ -292,7 +303,7 @@ if __name__ == "__main__":
 
 						frame_timestamp_ms = int((time.time() - start_time)*1000)
 
-						 
+						#mediapipe face detection thread 
 						detector.detect_async(mp_image, frame_timestamp_ms)
 
 						if rgb_annotated_image is not None:
@@ -306,6 +317,8 @@ if __name__ == "__main__":
 
 	        
 					#if (len(bvp) > 1) and len(timestamps) == len(bvp) and len(timestamps) == (len(mahrlist) + 1):
+						
+						# plotting results here
 						if (len(bvp) > 1):
 
 							if cv2.waitKey(1) & 0xFF == ord('q'):
