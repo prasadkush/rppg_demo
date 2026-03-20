@@ -51,9 +51,9 @@ An integrated webcam is required on the laptop. All the pretrained weights are a
 
 <br/>
 Please watch a demo video using the link below..
-<br/>
+<br/><br/>
 
-[ Watch video] https://www.dropbox.com/scl/fi/fa8qhlk0lkqjw8zfh4pla/result.webm?rlkey=46ufq3fhcopena57ivay129rf&st=mdg6m56x&dl=0
+https://www.dropbox.com/scl/fi/fa8qhlk0lkqjw8zfh4pla/result.webm?rlkey=46ufq3fhcopena57ivay129rf&st=mdg6m56x&dl=0
 
 <br/>
 
