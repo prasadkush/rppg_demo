@@ -1,7 +1,7 @@
 # rppg_demo
 
 <br/>
-This repository contains code for a livestream demo of rppg based on this paper https://arxiv.org/pdf/2504.01774. The face detection is formed using Mediapipe face detection  and the face detection and the model used is BlazeFace. The input to the code is a livestream video from an integrated web cam and the output is the heart rate, bvp, and signal quality. At the end of the session, the average heart rate and signal quality is displayed. Code from the Mediapipe face detection guide has been used 
+This repository contains code for a livestream demo of rppg based on this paper https://arxiv.org/pdf/2504.01774. The face detection is done using Mediapipe face detection and the face detection model used is BlazeFace. The input to the code is a livestream video from an integrated web cam and the output is the heart rate, bvp, and signal quality. At the end of the session, the average heart rate and signal quality is displayed.
 <br/><br/>
 
 ## Instructions for setup:
@@ -50,7 +50,7 @@ An integrated webcam is required on the laptop. All the pretrained weights are a
 ## Results 
 
 <br/>
-Please watch a demo video using the link below..
+Please watch a demo video using the link below.
 <br/><br/>
 
 https://www.dropbox.com/scl/fi/fa8qhlk0lkqjw8zfh4pla/result.webm?rlkey=46ufq3fhcopena57ivay129rf&st=mdg6m56x&dl=0
