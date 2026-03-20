@@ -27,9 +27,6 @@ Classifier_used = 'None'
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalcatface_extended.xml')
 
-#base_options = python.BaseOptions(model_asset_path='detector.tflite')
-#options = vision.FaceDetectorOptions(base_options=base_options)
-#detector = vision.FaceDetector.create_from_options(options)
 
 def _normalized_to_pixel_coordinates(
 		normalized_x: float, normalized_y: float, image_width: int,
@@ -72,7 +69,6 @@ def visualize(
 	image_gray = cv2.cvtColor(annotated_image, cv2.COLOR_RGB2GRAY)
 
 	num_detections = 0
-	#print('inside visualize')
 	for detection in detection_result.detections:
 		#print('inside num_detections')
 		# Draw bounding_box
@@ -101,38 +97,12 @@ def visualize(
 		num_detections += 1
 		Classifier_used = 'MediaPipe Blaze'
 		first_time_detect = False
-
-	#num_detections = 0
-	#if num_detections == 0 and first_time_detect == False:
-	#if num_detections == 0:
-		#print('inside num_detections zero: ')
-		#annotated_image = prev_annotated_image
-	#	cascade_detection = 0
-	#	faces = face_cascade.detectMultiScale(
- 	#	   image_gray,
-    #		scaleFactor=1.1,
-    #		minNeighbors=5,
-   	#		 minSize=(50, 50)
-	#		)
-		#print ('faces: ', faces)
-		#for (x, y, w, h) in faces:
-		#	start_point = x, y
-		#	end_point = x + w, y + h
-		#	cv2.rectangle(annotated_image, (x, y), (x+w, y+h), TEXT_COLOR, 3)
-		#	cascade_detection = 1
-		#	num_detections = 1
-		#	Classifier_used = 'Haarcascades'
-		#	first_time_detect = False
-		#	break
 	
 	#if cascade_detection == 0 and first_time_detect == False and num_detections == 0:
 	if first_time_detect == False and num_detections == 0:
 		start_point = prev_start_point
 		end_point = prev_end_point
 		cv2.rectangle(annotated_image, start_point, end_point, TEXT_COLOR, 3)
-		#print('numpy.array_equal(annotated_iSmage, rgb_annotated_image): ', np.array_equal(annotated_image, rgb_annotated_image))
-		#print('annotated_image: ', annotated_image)
-	#prev_annotated_image = annotated_image
 
 	prev_start_point = start_point
 	prev_end_point = end_point
@@ -145,11 +115,7 @@ FaceDetectorOptions = mp.tasks.vision.FaceDetectorOptions
 VisionRunningMode = mp.tasks.vision.RunningMode
 FaceDetectorResult = mp.tasks.vision.FaceDetectorResult
 
-image_path = 'my_photo-1.jpg'
 model_path = 'blaze_face_short_range.tflite'
-
-#def print_result(result: FaceDetectorResult, output_image: mp.Image, timestamp_ms: int):
-#    print('face detector result: {}'.format(result))
 
 face_detection_result = []
 frames_processed = 0
@@ -198,21 +164,8 @@ def print_result(result, output_image, timestamp_ms):
 			face_detection_result = result
 			image_copy = np.copy(mp_image.numpy_view())
 			annotated_image, start_point, endpoint, num_detections, classifier_used = visualize(image_copy, face_detection_result)
-			##rgb_annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
 			rgb_annotated_image = annotated_image
-			#print('num_detections: ', num_detections)
-			#if num_detections == 0:
-			#	print('annotated_image: ', annotated_image)
-		#print('start_point: ', start_point)
-		#print('endpoint: ', endpoint)e
 			if start_point[0] != -1 and endpoint[0] != -1:
-				#print('image_copy shape: ', image_copy.shape)
-				#print('top left x: ', max(0,start_point[0] - bbox_increase), 'bottom right x: ', min(image_copy.shape[0]-1, endpoint[0] + bbox_increase))
-				#print('top left y: ', max(0,start_point[1] - bbox_increase), 'bottom right y: ', min(image_copy.shape[1]-1, endpoint[1] + bbox_increase) )
-				#image_face = image_copy[max(0,start_point[1] - bbox_increase): min(image_copy.shape[0]-1, endpoint[1] + bbox_increase),
-				#max(0,start_point[0] - bbox_increase): min(image_copy.shape[1]-1, endpoint[0] + bbox_increase)] 
-				#print('top left x: ', start_point[0], 'bottom right x: ', endpoint[0])
-				#print('top left y: ', start_point[1], 'bottom right y: ', endpoint[1])
 				image_face = image_copy[start_point[1]: endpoint[1],
 				start_point[0]: endpoint[0]] 
 				#rgb_image_face = cv2.cvtColor(image_face, cv2.COLOR_BGR2RGB)
@@ -224,25 +177,14 @@ def print_result(result, output_image, timestamp_ms):
 				#print('output: ', output)
 				with lock:
 					bvp.append(output)
-					#if len(bvp) >= windowsize_bvp:
-					#	mabvp = np.mean(np.array(bvp[-windowsize_bvp:]))
-					#	mabvplist.append(mabvp)
-						#print('np.array(hrlist[-windowsize:]: ', np.array(hrlist[-windowsize:]))
-					#else:
-					#	mabvp = np.mean(np.array(bvp))
-					#	mabvplist.append(mabvp)
 					if first_time == 1:
 						timestamps.append(0)
 						timestamp_start = time.time()
 						first_time = 0
 					else:
 						timestamps.append(time.time() - timestamp_start)
-						#print('time int: ', timestamps[-1] - timestamps[-2])
-						#print('In thread 1')
-						#print('len(timestamps[1:][-64:]): ', len(timestamps[1:][-64:]))
 					if len(bvp) > 1:
-						#print('min(len(bvp), n_hr_bvp): ', min(len(bvp), n_hr_bvp))
-						#print('timestamps[-1] - timestamps[-min(len(bvp), n_hr_bvp)]: ', timestamps[-1] - timestamps[-min(len(bvp), n_hr_bvp)])
+
 						sr = min(len(bvp), n_hr_bvp)/(timestamps[-1] - timestamps[-min(len(bvp), n_hr_bvp)])
 						hr, snr = get_hr(bvp[-n_hr_bvp:], sr=sr)
 						print(f'\nSampling rate over last {min(len(bvp), n_hr_bvp)} values: {sr:.2f} Hz')
@@ -267,20 +209,10 @@ def print_result(result, output_image, timestamp_ms):
 						if len(hrlist) >= windowsize:
 							ma = np.mean(np.array(hrlist[-windowsize:]))
 							mahrlist.append(ma)
-						#print('np.array(hrlist[-windowsize:]: ', np.array(hrlist[-windowsize:]))
 						else:
 							ma = np.mean(np.array(hrlist))
 							mahrlist.append(ma)
-							#print('In thread 1')
-							#print('len(mahrlist[-64:]): ', len(mahrlist[-64:]))
-						#avghr = np.mean(np.array(mahrlist))
-			#cv2.imshow('image', rgb_annotated_image)
-			#if cv2.waitKey(1) & 0xFF == ord('q'):
-			#	pass
-# Create a face detector instance with the image mode:
-#options = FaceDetectorOptions(
-#    base_options=BaseOptions(model_asset_path=model_path),
-#    running_mode=VisionRunningMode.IMAGE)
+
 
 
 
@@ -293,21 +225,14 @@ cap = cv2.VideoCapture(0)
 frame_no = 0
 start_time = 0
 img_num = 0
-#with mp_face_detection.FaceDetection(
-#		model_selection=0, min_detection_confidence=0.5) as face_detection:
 
 plt.ion()
 
-# Create figure and axis
-#plt.figure(figsize=(10,5))
+
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10,6), constrained_layout=True)
 # Plot initial empty data and get the line artist object
 line, = ax1.plot([], [])
 line2, = ax2.plot([], [])
-#ax.set_ylim(0, 300) # Set a fixed Y-axis limit for stability
-#ax.set_xlim(0, 300)   # Set fixed X-axis limit to show only last N values
-#plt.xlabel("Time (s)")
-#plt.ylabel("BVP")
 plt.title("Heart Rate and BVP", pad=25)
 ax1.set_xlabel('Time (s)')
 ax1.set_ylabel('BVP')
@@ -330,10 +255,8 @@ def signal_handler(sig, frame):
     stop_event.set()
     cap.release()
     cv2.destroyAllWindows()		
-    #fig2 = plt.subplots(figsize=(10,5), constrained_layout=True)
     plt.close('all')
     plt.figure()
-    #fig2 = plt.subplots(figsize=(4,4))
     plt.text(0.5, 0.80, f'Average Heart Rate is {avghr:.2f} bpm',
     fontsize=14, ha='center', va='center',bbox=dict(facecolor='yellow', alpha=0.5, boxstyle='round,pad=0.5'))
     plt.text(0.5, 0.20, f'Average Signal quality is {avgsigqual:.2f}',
@@ -347,149 +270,109 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 
-with FaceDetector.create_from_options(options) as detector:
-	try: 
-		while cap.isOpened():
-			try: 
-				if frame_no == 0:
-					frame_no = 1
-					start_time = time.time()
-				#print('inside main thread reading image')
-				success, image = cap.read()
-				image.flags.writeable = False
-				#print('type image: ', type(image))
-				if success and not stop_event.is_set(): 
-				
-							#mp_image = mp.Image.create_from_file(image_path)
-				
-					mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image)
-					image = np.copy(mp_image.numpy_view())
-					#cv2.imshow('image', image)
-					#if cv2.waitKey(5) & 0xFF == 27:
-					#	break
+if __name__ == "__main__":
 
-						#face_detector_result = detector.detect(mp_image)
-					frame_timestamp_ms = int((time.time() - start_time)*1000)
-					#print('start_time: ', start_time)
-					#print('frame_timestamp_ms: ', frame_timestamp_ms)
-					 
-					#print('before detect_async')
-					detector.detect_async(mp_image, frame_timestamp_ms)
-						#print('face_detector_result: ', face_detector_result)
-					#print('after detect_async')
+	with FaceDetector.create_from_options(options) as detector:
+		try: 
+			while cap.isOpened():
+				try: 
+					if frame_no == 0:
+						frame_no = 1
+						start_time = time.time()
 
-				#image_copy = np.copy(mp_image.numpy_view())
-				#annotated_image = visualize(image_copy, face_detection_result)
-				#rgb_annotated_image = cv2.cvtColor(annotated_image, cv2.COLOR_BGR2RGB)
-				#print('rgb_annotated_image shape: ', rgb_annotated_image.shape)
-				#cv2.imshow('image', rgb_annotated_image)
-				#if cv2.waitKey(5) & 0xFF == 27:
-				#	break
-					if rgb_annotated_image is not None:
-						cv2.imshow('MediaPipe Face Detection', rgb_annotated_image)
-						if cv2.waitKey(5) & 0xFF == 27: # Press 'Esc' to exit
-							break
-					if rgb_image_face is not None:
-						cv2.imshow('cropped face: ', rgb_image_face)
-					#img_write = cv2.resize(rgb_image_face, (36, 36), interpolation=cv2.INTER_AREA)
-					#cv2.imwrite('images/image_' + str(imge_num) + '.jpg', img_write)
-					#img_num += 1
-						if cv2.waitKey(5) & 0xFF == 27: # Press 'Esc' to exit
-							break
+					success, image = cap.read()
+					image.flags.writeable = False
 
-        
-				#if (len(bvp) > 1) and len(timestamps) == len(bvp) and len(timestamps) == (len(mahrlist) + 1):
-					if (len(bvp) > 1):
-					#hr = get_hr(bvp[-64:])
-					#hrlist.append(hr)
-					#if len(hrlist) >= windowsize:
-					#	ma = np.mean(np.array(hrlist[-windowsize:]))
-					#	mahrlist.append(ma)
-					#	print('np.array(hrlist[-windowsize:]: ', np.array(hrlist[-windowsize:]))
-					#else:
-					#	ma = np.mean(np.array(hrlist))
-					#	mahrlist.append(ma)
-
-						if cv2.waitKey(1) & 0xFF == ord('q'):
-							break
-						with lock:
-							avghr = np.mean(np.array(mahrlist))
-							hr = mahrlist[-1]
-						#print(f'Heart Rate is {mahrlist[-1]:.2f}')
-						#print(f'Average Heart Rate is {avghr:.2f}')
-						#plt.clear()
-							line.set_data(timestamps[-nvals_plot:], bvp[-nvals_plot:])
-							#line.set_data(timestamps[-nvals_plot:], filtered_data[-nvals_plot:])
-							line2.set_data(timestamps[1:][-nvals_plot:], mahrlist[-nvals_plot:])
-							#print('inside main thread')
-							#print('len(timestamps[1:][-64:]): ', len(timestamps[1:][-64:]))
-							#print('len(mahrlist[-64:]): ', len(mahrlist[-64:]))
-							ax1.relim() # Recalculate limits
-							ax1.autoscale_view()
-							ax2.relim() # Recalculate limits
-							ax2.set_ylim(0,200)
-							ax2.autoscale_view()
-						#print('timestamps[-(int(len(timestamps[-256:])/2))]: ', timestamps[-(int(len(timestamps[-64:])/2))])
-						#print('(int(len(timestamps[-256:])/2)): ', (int(len(timestamps[-64:])/2)))
-						#plt.text(timestamps[-(int(len(timestamps[-256:])/2))], 0.0, 'Heart rate', fontsize=12, color='green')
+					if success and not stop_event.is_set(): 
 					
-						ax1.text(0.05, 1.30, f'Heart Rate = {hr:.2f}', 
-	            verticalalignment='top', horizontalalignment='left',
-	            transform=ax1.transAxes,
-	            bbox=dict(boxstyle='square', facecolor='white', alpha=0.5), fontsize=14)
-						ax1.text(0.40, 1.30, f'Signal Quallity = {signal_quality:.2f}', 
-	            verticalalignment='top', horizontalalignment='left',
-	            transform=ax1.transAxes,
-	            bbox=dict(boxstyle='square', facecolor='white', alpha=0.5), fontsize=14)
-						ax1.text(0.70, 1.30, f'Avg. Heart Rate = {avghr:.2f}', 
-	            verticalalignment='top', horizontalalignment='left',
-	            transform=ax1.transAxes,
-	            bbox=dict(boxstyle='square', facecolor='white', alpha=0.5), fontsize=14)
+					
+						mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image)
+						image = np.copy(mp_image.numpy_view())
 
-						plt.draw()
 
-					#plt.plot(timestamps[-60:], bvp[-60:], color='r')
-					#plt.xlabel('Time (s)')
-						plt.pause(0.1)
+						frame_timestamp_ms = int((time.time() - start_time)*1000)
 
-				#line.set_xdata(timestamps[-256:])
-				#line.set_ydata(bvp[-256:])
-				#fig.canvas.draw()
-				#fig.canvas.flush_events()
-				#time.sleep(0.05)
+						 
+						detector.detect_async(mp_image, frame_timestamp_ms)
 
-				elif not success:
-					continue
-			except KeyboardInterrupt:
-				print('in interrupt 1')
-				avghr = np.mean(np.array(mahrlist))
-				hr = mahrlist[-1]
-				print(f'Heart Rate is {hr:.2f}')
-				print(f'Average Heart Rate is {avghr:.2f}')
-				stop_event.set()
-			#finally:
-				detector.close()
-				cap.release()
-				#cv2.destroyAllWindows()		
-				sys.exit()
-				break
+						if rgb_annotated_image is not None:
+							cv2.imshow('MediaPipe Face Detection', rgb_annotated_image)
+							if cv2.waitKey(5) & 0xFF == 27: # Press 'Esc' to exit
+								break
+						if rgb_image_face is not None:
+							cv2.imshow('cropped face: ', rgb_image_face)
+							if cv2.waitKey(5) & 0xFF == 27: # Press 'Esc' to exit
+								break
+
+	        
+					#if (len(bvp) > 1) and len(timestamps) == len(bvp) and len(timestamps) == (len(mahrlist) + 1):
+						if (len(bvp) > 1):
+
+							if cv2.waitKey(1) & 0xFF == ord('q'):
+								break
+							with lock:
+								avghr = np.mean(np.array(mahrlist))
+								hr = mahrlist[-1]
+
+								line.set_data(timestamps[-nvals_plot:], bvp[-nvals_plot:])
+								#line.set_data(timestamps[-nvals_plot:], filtered_data[-nvals_plot:])
+								line2.set_data(timestamps[1:][-nvals_plot:], mahrlist[-nvals_plot:])
+
+								ax1.relim() # Recalculate limits
+								ax1.autoscale_view()
+								ax2.relim() # Recalculate limits
+								ax2.set_ylim(0,200)
+								ax2.autoscale_view()
+
+							ax1.text(0.05, 1.30, f'Heart Rate = {hr:.2f}', 
+		            verticalalignment='top', horizontalalignment='left',
+		            transform=ax1.transAxes,
+		            bbox=dict(boxstyle='square', facecolor='white', alpha=0.5), fontsize=14)
+							ax1.text(0.40, 1.30, f'Signal Quallity = {signal_quality:.2f}', 
+		            verticalalignment='top', horizontalalignment='left',
+		            transform=ax1.transAxes,
+		            bbox=dict(boxstyle='square', facecolor='white', alpha=0.5), fontsize=14)
+							ax1.text(0.70, 1.30, f'Avg. Heart Rate = {avghr:.2f}', 
+		            verticalalignment='top', horizontalalignment='left',
+		            transform=ax1.transAxes,
+		            bbox=dict(boxstyle='square', facecolor='white', alpha=0.5), fontsize=14)
+
+							plt.draw()
+
+							plt.pause(0.1)
+
+					elif not success:
+						continue
+				except KeyboardInterrupt:
+					print('in interrupt 1')
+					avghr = np.mean(np.array(mahrlist))
+					hr = mahrlist[-1]
+					print(f'Heart Rate is {hr:.2f}')
+					print(f'Average Heart Rate is {avghr:.2f}')
+					stop_event.set()
+				#finally:
+					detector.close()
+					cap.release()
+					#cv2.destroyAllWindows()		
+					sys.exit()
+					break
+				#sys.exit()
+				
+		except KeyboardInterrupt:
+			print('in interrupt 2')
+			avghr = np.mean(np.array(mahrlist))
+			hr = mahrlist[-1]
+			print(f'Heart Rate is {hr:.2f}')
+			print(f'Average Heart Rate is {avghr:.2f}')
 			#sys.exit()
-			
-	except KeyboardInterrupt:
-		print('in interrupt 2')
-		avghr = np.mean(np.array(mahrlist))
-		hr = mahrlist[-1]
-		print(f'Heart Rate is {hr:.2f}')
-		print(f'Average Heart Rate is {avghr:.2f}')
-		#sys.exit()
-	finally:
-		stop_event.set()
-		detector.close()
-		cap.release()
-		#cv2.destroyAllWindows()		
-		sys.exit()
+		finally:
+			stop_event.set()
+			detector.close()
+			cap.release()
+			#cv2.destroyAllWindows()		
+			sys.exit()
 
-plt.ioff()
-plt.show()
+	plt.ioff()
+	plt.show()
 
-cap.release()    
+	cap.release()    
