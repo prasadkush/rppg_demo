@@ -20,7 +20,7 @@ Create a virtual environment.
 ```
 python3 -m venv rppgvenv
 ```
-<br/><br/>
+<br/>
 
 ```
 source rppgvenv/bin/activate
