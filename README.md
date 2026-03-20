@@ -55,7 +55,7 @@ An integrated webcam is required on the laptop. All the pretrained weights are a
 
 <br/>
 [1] Wang K, Tang J, Fan Y, Ji J, Shi Y, Wang Y. Memory-efficient low-latency remote photoplethysmography through temporal-spatial state space duality. arXiv preprint arXiv:2504.01774. 2025 Apr 2.
-<br/>
+<br/><br/>
 
 [2] https://github.com/KegangWangCCNU/ME-rPPG/tree/main
 
