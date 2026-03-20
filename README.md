@@ -20,6 +20,7 @@ Create a virtual environment.
 ```
 python3 -m venv rppgvenv
 ```
+<br/><br/>
 
 ```
 source rppgvenv/bin/activate
@@ -27,12 +28,12 @@ source rppgvenv/bin/activate
 
 <br/>
 Install the requirements.
-<br/>
+<br/><br/>
 
 ```
 python3 install -r requirements.txt
 ```
-
+<br/><br/>
 
 ## Instructions for Inference:
 
